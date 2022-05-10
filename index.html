@@ -1,0 +1,78 @@
+<head>
+  <title>🍅</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #000000;
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+<body>
+  <div style="max-width: 320px; margin: auto;">
+    <h1 style="text-align: center;">🍅 Timer ⏱</h1>
+    <input id="innie" value="20">
+    <button id="butty">Start</button>
+    <select id="unitsy">
+      <option value="1">Seconds</option>
+      <option value="60" selected>Minutes</option>
+      <option value="3600">Hours</option>
+    </select>
+    <p id="outie"></p>
+    <progress id="proggy" value=100 max=100 style="width: 320px;"></progress>
+  </div>
+  <script>
+    let duration = 20 * 60;
+    let timer = duration;
+    let running = false;
+    const beep_url = 'https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3';
+    const beep = new Audio(beep_url);
+
+    let innie = document.getElementById("innie");
+    let unitsy = document.getElementById("unitsy");
+    let butty = document.getElementById("butty");
+    let outie = document.getElementById("outie");
+
+    update();
+
+    innie.addEventListener("change", reset);
+    innie.addEventListener("keydown", (e) => {
+      if (e.code === "Enter") {reset();}
+    })
+
+    let decrementer;
+
+    butty.addEventListener("click", () => {
+      running = !running;
+      if (running) {
+        butty.innerHTML = "Stahp!";
+        decrementer = setInterval(() => {
+            if (timer > 0) {
+          	  timer--;
+              update();
+            } else {
+          	  beep.play();
+            }
+          },
+          1000
+        );
+      } else {
+        clearInterval(decrementer);
+        butty.innerHTML = "Start";
+      }
+    })
+
+    function update() {
+      outie.innerHTML = `${timer} seconds remain.`;
+      proggy.max = duration;
+      proggy.value = timer;
+    }
+
+    function reset() {
+      duration = innie.value * unitsy.value;
+      timer = duration;
+      update();
+    }
+  </script>
+</body>
